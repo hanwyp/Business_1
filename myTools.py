@@ -13,7 +13,6 @@ from sqlalchemy.orm import sessionmaker
 from models import *
 import os, shutil
 
-
 engine = create_engine('sqlite:///Business_license.db?check_same_thread=False', echo=True)
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -45,26 +44,78 @@ def my_save(new_card):
     db_session.commit()
     db_session.close()
 
+
 def my_find(Number):
     db_session = DBSession()
-    data = db_session.query(BasicInfo).filter_by(IdNumber =Number).first()
+    data = db_session.query(BasicInfo).filter_by(IdNumber=Number).first()
     if (data is None):
         return True
     else:
         return False
+
     db_session.commit()
     db_session.close()
 
-def my_updata(Number):
+def my_find_re(Number):
     db_session = DBSession()
     data = db_session.query(BasicInfo).filter_by(IdNumber=Number).first()
-    # data = card
+    print(data.IdNumber)
+
+    # db_session.commit()
+    db_session.close()
+    return data
+
+
+def my_updata( card):
+    db_session = DBSession()
+    data = db_session.query(BasicInfo).filter_by(IdNumber=card.IdNumber).first()
+    """
+    PeopleID = Column(Integer, primary_key=True, autoincrement=True)
+    PeopleName = Column(String(20))
+    PeopleSex = Column(String(4))
+    PeopleNation = Column(String(10))
+    PeopleAddress = Column(String(100))
+    IdNumber = Column(String(18))
+    PeopleValStart = Column(String(10))
+    PeopleValEnd = Column(String(10))
+    PicFront = Column(String(100))
+    PicBack = Column(String(100))
+    """
+    data.PeopleName = card.PeopleName
+    data.PeopleSex = card.PeopleSex
+    data.PeopleNation = card.PeopleNation
+    data.IdNumber = card.IdNumber
+    data.PeopleAddress = card.PeopleAddress
+    data.PeopleValStart = card.PeopleValStart
+    data.PeopleValEnd = card.PeopleValEnd
+    data.PicFront = card.PicFront
+    data.PicBack = card.PicBack
+
+    print(data.IdNumber,data.PicBack)
+
     db_session.commit()
     db_session.close()
     # return data
 
+def read_tab():
+    db_session = DBSession()
+    data = db_session.query(BasicInfo).order_by(BasicInfo.PeopleID.desc()).all()
+    print(data)
+    if data is not None:
+        data_list=[]
+        for item in data:
+            item_list = []
+            item_list.append(item.PeopleName)
+            item_list.append(item.PeopleNation)
+            item_list.append(str(item.IdNumber))
+            data_list.append(item_list)
+        return data_list
 
+
+    db_session.commit()
+    db_session.close()
 
 if __name__ == '__main__':
     # my_find('12022519820318392X')
-    my_updata('12022519820318392X')
+    # my_updata('12022519820318392X')
+    read_tab()

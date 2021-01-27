@@ -32,9 +32,9 @@ class CardAip():
         API_KEY = cp.get(section,'API_KEY')
         SECRET_KEY = cp.get(section,'SECRET_KEY')
 
-        print(APP_ID)
-        print(API_KEY)
-        print(SECRET_KEY)
+        # print(APP_ID)
+        # print(API_KEY)
+        # print(SECRET_KEY)
         self.client = AipOcr(APP_ID, API_KEY, SECRET_KEY)
         self.filePath = filePath
 

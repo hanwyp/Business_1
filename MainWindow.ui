@@ -335,6 +335,38 @@
           <height>671</height>
          </rect>
         </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="rowCount">
+         <number>20</number>
+        </property>
+        <property name="columnCount">
+         <number>3</number>
+        </property>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <column/>
+        <column/>
+        <column/>
        </widget>
        <widget class="QPushButton" name="btnOK">
         <property name="geometry">
@@ -347,6 +379,19 @@
         </property>
         <property name="text">
          <string>保存</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="tabView">
+        <property name="geometry">
+         <rect>
+          <x>740</x>
+          <y>570</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
         </property>
        </widget>
       </widget>
@@ -365,7 +410,7 @@
      <x>0</x>
      <y>0</y>
      <width>1235</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
