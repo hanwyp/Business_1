@@ -39,6 +39,8 @@ class Window(Ui_MainWindow, QMainWindow):
         # self.tabView.clicked.connect(self.tab_view)
         self.tableWidget.clicked.connect(self.addTxt)
 
+
+
     def addTxt(self):
 
         '''
@@ -48,7 +50,6 @@ class Window(Ui_MainWindow, QMainWindow):
         i_list = []
         for i in self.tableWidget.selectedItems():
             i_list.append(str(i.text()))
-        print(i_list[2])
         data = my_find_re(i_list[2])
         self.txt_name.setText(data.PeopleName)
         self.txt_nation.setText(data.PeopleNation)
