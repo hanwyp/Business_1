@@ -8,7 +8,9 @@
 """
 
 import sys, os
-from threading import Thread
+import threading
+
+from PyQt5.QtCore import QThread, pyqtSignal
 
 if hasattr(sys, 'frozen'):
     os.environ['PATH'] = sys._MEIPASS + ";" + os.environ['PATH']
@@ -24,6 +26,20 @@ from models import *
 import shutil
 
 
+class myThread(QThread):
+    trigger = pyqtSignal(object)
+
+    def __init__(self, imgName, face):
+        super(myThread, self).__init__()
+        self.imgName = imgName
+        self.face = face
+
+    def run(self):
+        aip = CardAip(self.imgName)
+        card = aip.getinfo(self.face)
+        self.trigger.emit(card)
+
+
 class Window(Ui_MainWindow, QMainWindow):
     imgName = ''
     imgNameB = ''
@@ -32,14 +48,24 @@ class Window(Ui_MainWindow, QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.btnF.clicked.connect(lambda: self.openImg('Front'))
-        self.btnB.clicked.connect(lambda: self.openImg('Back'))
+        self.btnF.clicked.connect(lambda: self.openimg_trF('Front'))
+        self.btnB.clicked.connect(lambda: self.openimg_trB('Back'))
         self.btnOK.clicked.connect(self.create_car)
         self.tab_view()
         # self.tabView.clicked.connect(self.tab_view)
         self.tableWidget.clicked.connect(self.addTxt)
 
+    def openimg_trF(self, face):
+        self.openImg(face)
+        self.mbt = myThread(self.imgName, face)
+        self.mbt.trigger.connect(self.viewF)
+        self.mbt.start()
 
+    def openimg_trB(self, face):
+        self.openImg(face)
+        self.mbt = myThread(self.imgNameB, face)
+        self.mbt.trigger.connect(self.viewB)
+        self.mbt.start()
 
     def addTxt(self):
 
@@ -60,7 +86,7 @@ class Window(Ui_MainWindow, QMainWindow):
         self.txt_end.setText(str(data.PeopleValEnd))
         self.imgName = data.PicFront
         self.imgNameB = data.PicBack
-        print(self.imgName,self.imgNameB)
+        print(self.imgName, self.imgNameB)
         self.read_flag = False
 
         if data.PicFront is not None:
@@ -130,14 +156,14 @@ class Window(Ui_MainWindow, QMainWindow):
             self.setLayout(vbox)
             self.lbl_Front.setScaledContents(True)
 
-            aip = CardAip(self.imgName)
-            card = aip.getinfo(face)
+            # aip = CardAip(self.imgName)
+            # card = aip.getinfo(face)
 
-            self.txt_name.setText(card.name)
-            self.txt_sex.setText(card.sex)
-            self.txt_id_numer.setText(card.ID_numer)
-            self.txt_address.setText(card.address)
-            self.txt_nation.setText(card.nation)
+            # self.txt_name.setText(card.name)
+            # self.txt_sex.setText(card.sex)
+            # self.txt_id_numer.setText(card.ID_numer)
+            # self.txt_address.setText(card.address)
+            # self.txt_nation.setText(card.nation)
 
         if face == 'Back':
             self.imgNameB, imgType = QFileDialog.getOpenFileName()
@@ -147,8 +173,20 @@ class Window(Ui_MainWindow, QMainWindow):
             self.setLayout(vbox)
             self.lbl_back.setScaledContents(True)
 
-            aip = CardAip(self.imgNameB)
-            card = aip.getinfo(face)
+
+            # aip = CardAip(self.imgNameB)
+            # card = aip.getinfo(face)
+
+    def viewF(self, card):
+        if card is not None:
+            self.txt_name.setText(card.name)
+            self.txt_sex.setText(card.sex)
+            self.txt_id_numer.setText(card.ID_numer)
+            self.txt_address.setText(card.address)
+            self.txt_nation.setText(card.nation)
+
+    def viewB(self, card):
+        if card is not None:
             self.txt_start.setText(card.start)
             self.txt_end.setText(card.end)
 
@@ -171,8 +209,6 @@ class Window(Ui_MainWindow, QMainWindow):
 
     def create_car(self):
 
-
-
         new_car = BasicInfo()
         new_car.PeopleName = self.txt_name.text()
         new_car.PeopleSex = self.txt_sex.text()
@@ -181,44 +217,46 @@ class Window(Ui_MainWindow, QMainWindow):
         new_car.PeopleNation = self.txt_nation.text()
         new_car.PeopleValStart = self.txt_start.text()
         new_car.PeopleValEnd = self.txt_end.text()
+        if len(new_car.PeopleName) != 0:
+            if my_find(new_car.IdNumber):
 
+                if len(self.imgName) != 0:
+                    new_car.PicFront = self.pathAdd(new_car, '1')
+                if len(self.imgNameB) != 0:
+                    new_car.PicBack = self.pathAdd(new_car, '2')
 
-        if my_find(new_car.IdNumber):
+                my_save(new_car)
+            else:
+                reply = QMessageBox.question(self, '信息', '已录入，更新吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                if reply == QMessageBox.Yes:
+                    """
+                    将文件名复制给PicFront、PicBack
+                    """
+                    # if len(self.imgName) != 0:
+                    #     if len(self.imgName) != 0:
+                    #         new_car.PicFront = self.pathAdd(new_car, '1')
+                    #     if len(self.imgNameB) != 0:
+                    #         new_car.PicBack = self.pathAdd(new_car, '2')
+                    # if len(self.imgNameB) != 0:
+                    #     if len(self.imgName) != 0:
+                    #         new_car.PicFront = self.pathAdd(new_car, '1')
+                    #     if len(self.imgNameB) != 0:
+                    #         new_car.PicBack = self.pathAdd(new_car, '2')
+                    if self.read_flag:
 
-            if len(self.imgName) != 0:
-                new_car.PicFront = self.pathAdd(new_car, '1')
-            if len(self.imgNameB) != 0:
-                new_car.PicBack = self.pathAdd(new_car, '2')
+                        if len(self.imgName) != 0:
+                            new_car.PicFront = self.pathAdd(new_car, '1')
+                        if len(self.imgNameB) != 0:
+                            new_car.PicBack = self.pathAdd(new_car, '2')
 
-            my_save(new_car)
+                    else:
+                        new_car.PicFront = self.imgName
+                        new_car.PicBack = self.imgNameB
+                    my_updata(new_car)
+            self.tab_view()
         else:
-            reply = QMessageBox.question(self, '信息', '已录入，更新吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            if reply == QMessageBox.Yes:
-                """
-                将文件名复制给PicFront、PicBack
-                """
-                # if len(self.imgName) != 0:
-                #     if len(self.imgName) != 0:
-                #         new_car.PicFront = self.pathAdd(new_car, '1')
-                #     if len(self.imgNameB) != 0:
-                #         new_car.PicBack = self.pathAdd(new_car, '2')
-                # if len(self.imgNameB) != 0:
-                #     if len(self.imgName) != 0:
-                #         new_car.PicFront = self.pathAdd(new_car, '1')
-                #     if len(self.imgNameB) != 0:
-                #         new_car.PicBack = self.pathAdd(new_car, '2')
-                if self.read_flag:
+            QMessageBox.question(self, '信息', '必须有姓名！', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
-                    if len(self.imgName) != 0:
-                        new_car.PicFront = self.pathAdd(new_car, '1')
-                    if len(self.imgNameB) != 0:
-                        new_car.PicBack = self.pathAdd(new_car, '2')
-
-                else:
-                    new_car.PicFront = self.imgName
-                    new_car.PicBack = self.imgNameB
-                my_updata(new_car)
-        self.tab_view()
 
 if __name__ == '__main__':
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)

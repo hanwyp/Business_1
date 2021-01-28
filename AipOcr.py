@@ -42,33 +42,39 @@ class CardAip():
 
     def getinfo(self,face):
 
-        if face=='Front':
-            with open(self.filePath, 'rb') as fp:
-                image = fp.read()
-            idCardSide = "front"
-            result = self.client.idcard(image, idCardSide)
-            print(result)
-            card=Card()
-            card.name = result["words_result"]["姓名"]["words"]
-            card.sex = result["words_result"]["性别"]["words"]
-            card.nation = result["words_result"]["民族"]["words"]
-            card.birthday = result["words_result"]["出生"]["words"]
-            card.ID_numer = result["words_result"]["公民身份号码"]["words"]
-            card.address = result["words_result"]["住址"]["words"]
+        try:
+
+            if face=='Front':
+                with open(self.filePath, 'rb') as fp:
+                    image = fp.read()
+                idCardSide = "front"
+                result = self.client.idcard(image, idCardSide)
+                print(result)
+                card=Card()
+                card.name = result["words_result"]["姓名"]["words"]
+                card.sex = result["words_result"]["性别"]["words"]
+                card.nation = result["words_result"]["民族"]["words"]
+                card.birthday = result["words_result"]["出生"]["words"]
+                card.ID_numer = result["words_result"]["公民身份号码"]["words"]
+                card.address = result["words_result"]["住址"]["words"]
 
 
-            # return (self.name,self.sex,self.nation,self.ID_numer,self.address,self.birthday)
-            return card
-        if face=='Back':
-            with open(self.filePath, 'rb') as fp:
-                image = fp.read()
-            idCardSide = "back"
-            result = self.client.idcard(image, idCardSide)
-            print(result)
-            card = Card()
-            card.start = result["words_result"]["签发日期"]["words"]
-            card.end = result["words_result"]["失效日期"]["words"]
-            return card
+                # return (self.name,self.sex,self.nation,self.ID_numer,self.address,self.birthday)
+                return card
+            if face=='Back':
+                with open(self.filePath, 'rb') as fp:
+                    image = fp.read()
+                idCardSide = "back"
+                result = self.client.idcard(image, idCardSide)
+                print(result)
+                card = Card()
+                card.start = result["words_result"]["签发日期"]["words"]
+                card.end = result["words_result"]["失效日期"]["words"]
+                return card
+        except:
+            print("Error: 没有找到文件或读取文件失败")
+
+
 if __name__ == '__main__':
     aip = CardAip('2.jpg')
     card =aip.getinfo()
