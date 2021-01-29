@@ -34,7 +34,7 @@
         <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="1,1">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
+           <layout class="QVBoxLayout" name="verticalLayout_2" stretch="8,1,1,1,1,1,1,1">
             <item>
              <layout class="QGridLayout" name="gridLayout_3">
               <item row="0" column="0">
