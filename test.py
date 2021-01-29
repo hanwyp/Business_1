@@ -1,75 +1,55 @@
-#!/usr/local/bin/python3
-# -*- coding: utf-8 -*-
+import sys, os
+import threading
 
-"""
-@File    :test.py
-@Author  :keyin
-@Time    :2021-01-26 15:55
-"""
-from PyQt5.Qt import (QApplication, QWidget, QPushButton,
-                      QThread,QMutex,pyqtSignal)
-import sys
-import time
+from PyQt5.QtCore import QThread, pyqtSignal
 
-qmut_1 = QMutex() # 创建线程锁
-qmut_2 = QMutex()
-# 继承QThread
-class Thread_1(QThread):  # 线程1
+if hasattr(sys, 'frozen'):
+    os.environ['PATH'] = sys._MEIPASS + ";" + os.environ['PATH']
+    print(os.environ['PATH'])
+
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QFileDialog, QMainWindow, QVBoxLayout, QApplication, QMessageBox, QTableWidgetItem, QPushButton, QLineEdit
+from PyQt5 import *
+
+
+from MainWindow import *
+from AipOcr import *
+from myTools import *
+from models import *
+import shutil
+
+class Window(Ui_MainWindow, QMainWindow):
+    imgName = ''
+    imgNameB = ''
+    read_flag = True
+
     def __init__(self):
         super().__init__()
-
-    def run(self):
-        qmut_1.lock() # 加锁
-        values = [1, 2, 3, 4, 5]
-        for i in values:
-            print(i)
-            time.sleep(0.5)  # 休眠
-        qmut_1.unlock() # 解锁
-
-
-class Thread_2(QThread):  # 线程2
-    _signal =pyqtSignal()
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        # qmut_2.lock()  # 加锁
-        values = ["a", "b", "c", "d", "e"]
-        for i in values:
-            print(i)
-            time.sleep(0.5)
-        # qmut_2.unlock()  # 解锁
-        self._signal.emit()
+        self.setupUi(self)
+        # self.btnF.clicked.connect(lambda: self.openimg_trF('Front'))
+        # self.btnB.clicked.connect(lambda: self.openimg_trB('Back'))
+        # self.btnOK.clicked.connect(self.create_car)
+        # self.tab_view()
+        # # self.tabView.clicked.connect(self.tab_view)
+        # self.tableWidget.clicked.connect(self.addTxt)
 
 
-class MyWin(QWidget):
-    def __init__(self):
-        super().__init__()
-        # 按钮初始化
-        self.btn_1 = QPushButton('按钮1', self)
-        self.btn_1.move(120, 80)
-        self.btn_1.clicked.connect(self.click_1)  # 绑定槽函数
-
-        self.btn_2 = QPushButton('按钮2', self)
-        self.btn_2.move(120, 120)
-        self.btn_2.clicked.connect(self.click_2)  # 绑定槽函数
-
-    def click_1(self):
-        self.thread_1 = Thread_1()  # 创建线程
-        self.thread_1.start()  # 开始线程
-
-    def click_2(self):
-        self.btn_2.setEnabled(False)
-        self.thread_2 = Thread_2()
-        self.thread_2._signal.connect(self.set_btn)
-        self.thread_2.start()
-
-    def set_btn(self):
-        self.btn_2.setEnabled(True)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv)
-    myshow = MyWin()
-    myshow.show()
+    window = Window()
+    window.show()
+    # window.setEnabled()
+    # for i in  window.base_info.findChildren(QLineEdit):
+    #     i.setEnabled(True)
+
+    # for i in window.base_info.findChildren(QPushButton):
+    #     i.setEnabled(False)
+
+    # window.btnNew.setEnabled(True)
+    QFileDialog.getOpenFileName(filter='*.jpg;*.png')
+
     sys.exit(app.exec_())
+

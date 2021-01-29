@@ -8,16 +8,14 @@
 """
 
 import sys, os
-import threading
 
-from PyQt5.QtCore import QThread, pyqtSignal
 
 if hasattr(sys, 'frozen'):
     os.environ['PATH'] = sys._MEIPASS + ";" + os.environ['PATH']
     print(os.environ['PATH'])
 
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QFileDialog, QMainWindow, QVBoxLayout, QApplication, QMessageBox, QTableWidgetItem
+
+from PyQt5.Qt import *
 
 from MainWindow import *
 from AipOcr import *
@@ -27,7 +25,7 @@ import shutil
 
 
 class myThread(QThread):
-    trigger = pyqtSignal(object)
+    trigger = pyqtSignal(object)  # 自定义一个信号，object是要返回给回调函数的返回值的Type
 
     def __init__(self, imgName, face):
         super(myThread, self).__init__()
@@ -47,30 +45,118 @@ class Window(Ui_MainWindow, QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
+        self.setup_ui()
+        self.tab_view()
         self.btnF.clicked.connect(lambda: self.openimg_trF('Front'))
         self.btnB.clicked.connect(lambda: self.openimg_trB('Back'))
         self.btnOK.clicked.connect(self.create_car)
-        self.tab_view()
-        # self.tabView.clicked.connect(self.tab_view)
+        self.btnNew.clicked.connect(self.btnNew_click)
+        self.btnEdit.clicked.connect(self.btnEdit_click)
+        self.btnDel.clicked.connect(self.del_click)
+        self.btnCancel.clicked.connect(self.cancel_click)
+
         self.tableWidget.clicked.connect(self.addTxt)
+    def setup_ui(self):
+        self.setupUi(self)
+        self.tab_view()
+
+    def btnNew_click(self):
+        self.new_ui()
+
+    def btnEdit_click(self):
+        self.Edit_ui()
+
+    def Edit_ui(self):
+        for i in self.base_info.findChildren(QLineEdit):
+            i.setEnabled(True)
+        self.btnOK.setEnabled(True)
+        self.btnNew.setEnabled(False)
+        self.btnEdit.setEnabled(False)
+        self.tableWidget.setEnabled(False)
+        self.btnB.setEnabled(True)
+        self.btnF.setEnabled(True)
+
+    def save_ui(self):
+        for i in self.base_info.findChildren(QLineEdit):
+            i.setEnabled(False)
+        self.btnOK.setEnabled(False)
+        self.btnNew.setEnabled(True)
+        self.btnEdit.setEnabled(False)
+        self.tableWidget.setEnabled(True)
+        self.btnB.setEnabled(False)
+        self.btnF.setEnabled(False)
+
+    def new_ui(self):
+        for i in self.base_info.findChildren(QLineEdit):
+            i.setEnabled(True)
+            i.setText('')
+        self.btnOK.setEnabled(True)
+        self.btnNew.setEnabled(False)
+        self.btnEdit.setEnabled(False)
+        self.tableWidget.setEnabled(False)
+        self.btnB.setEnabled(True)
+        self.btnF.setEnabled(True)
+        self.btnCancel.setEnabled(True)
+
+        path = os.path.abspath('.')
+        self.imgName = os.path.join(path, 'DataImg', 'none.jpg')
+        self.imgNameB = os.path.join(path, 'DataImg', 'none.jpg')
+
+        self.lbl_Front.setPixmap(QPixmap(self.imgName))
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.lbl_Front)
+        self.setLayout(vbox)
+        self.lbl_Front.setScaledContents(True)
+
+        self.lbl_back.setPixmap(QPixmap(self.imgNameB))
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.lbl_back)
+        self.setLayout(vbox)
+        self.lbl_back.setScaledContents(True)
+
+    def del_ui(self):
+        pass
+
+    def cancel_ui(self):
+        self.new_ui()
+        self.btnOK.setEnabled(False)
+        self.tableWidget.setEnabled(True)
+        self.btnNew.setEnabled(True)
+
+    def del_click(self):
+        db_session = DBSession()
+        name = self.txt_name.text()
+        number = self.txt_id_numer.text()
+        if number != '' and name != '':
+            db_session.query(UserInfo).filter(UserInfo.idNumber == number).delete()
+            db_session.query(BasicInfo).filter(BasicInfo.IdNumber == number).delete()
+            db_session.commit()
+        db_session.close()
+        self.tab_view()
+        self.new_ui()
+        self.save_ui()
+
+    def cancel_click(self):
+        self.cancel_ui()
 
     def openimg_trF(self, face):
-        self.openImg(face)
-        self.mbt = myThread(self.imgName, face)
-        self.mbt.trigger.connect(self.viewF)
-        self.mbt.start()
+        if self.openImg(face):
+            self.mbt = myThread(self.imgName, face)     #定义线程，self.imgName和face是参数
+            self.mbt.trigger.connect(self.viewF)        # 定义线程结束后执行那个函数，参数是信号发送emit后的值
+            self.mbt.start()
 
     def openimg_trB(self, face):
-        self.openImg(face)
-        self.mbt = myThread(self.imgNameB, face)
-        self.mbt.trigger.connect(self.viewB)
-        self.mbt.start()
+        if self.openImg(face):
+            self.mbt2 = myThread(self.imgNameB, face)
+            self.mbt2.trigger.connect(self.viewB)        # 定义线程结束后执行那个函数，参数是信号发送emit后的值
+            self.mbt2.start()
 
     def addTxt(self):
 
         '''
-         作用：双击事件监听，显示被选中的单元格
+         作用：鼠标单击事件监听，显示被选中的单元格
         '''
         # 打印被选中的单元格
         i_list = []
@@ -86,7 +172,6 @@ class Window(Ui_MainWindow, QMainWindow):
         self.txt_end.setText(str(data.PeopleValEnd))
         self.imgName = data.PicFront
         self.imgNameB = data.PicBack
-        print(self.imgName, self.imgNameB)
         self.read_flag = False
 
         if data.PicFront is not None:
@@ -101,10 +186,29 @@ class Window(Ui_MainWindow, QMainWindow):
         else:
             self.imgView('none.jpg')
 
+        if self.txt_name is not None:
+            self.btnEdit.setEnabled(True)
+
+        db_session = DBSession()
+        user_data = db_session.query(UserInfo).filter_by(idNumber=data.IdNumber).first()
+
+        db_session.close()
+
+        if user_data is not None:
+            self.txt_wechat.setText(str(user_data.wechat))
+            self.txt_check.setText(str(user_data.PhoneCheck))
+            self.txt_Phone.setText(str(user_data.peoplePhone))
+            self.btnDel.setEnabled(True)
+        else:
+            self.txt_wechat.setText(None)
+            self.txt_check.setText(None)
+            self.txt_Phone.setText(None)
+
+
+
     def imgView(self, new_file):
         path = os.path.abspath('.')
         new = os.path.join(path, 'DataImg', new_file)
-        print(new_file[-5])
 
         if new_file[-5] == '1':
             self.lbl_Front.setPixmap(QPixmap(new))
@@ -123,7 +227,7 @@ class Window(Ui_MainWindow, QMainWindow):
 
     def tab_view(self):
         items = read_tab()
-        # print(len(items))
+
         if len(items) != 0:
 
             self.tableWidget.setRowCount(len(items))
@@ -148,34 +252,33 @@ class Window(Ui_MainWindow, QMainWindow):
         # return (card.name, card.sex, card.nation, card.ID_numer, card.address)
         # print(str)
         if face == 'Front':
-            self.imgName, imgType = QFileDialog.getOpenFileName()
-            self.lbl_Front.setPixmap(QPixmap(self.imgName))
+            self.imgName, _ = QFileDialog.getOpenFileName(filter='*.jpg;*.png')
 
-            vbox = QVBoxLayout()
-            vbox.addWidget(self.lbl_Front)
-            self.setLayout(vbox)
-            self.lbl_Front.setScaledContents(True)
+            if self.imgName!='':
 
-            # aip = CardAip(self.imgName)
-            # card = aip.getinfo(face)
+                self.lbl_Front.setPixmap(QPixmap(self.imgName))
 
-            # self.txt_name.setText(card.name)
-            # self.txt_sex.setText(card.sex)
-            # self.txt_id_numer.setText(card.ID_numer)
-            # self.txt_address.setText(card.address)
-            # self.txt_nation.setText(card.nation)
+                vbox = QVBoxLayout()
+                vbox.addWidget(self.lbl_Front)
+                self.setLayout(vbox)
+                self.lbl_Front.setScaledContents(True)
+                return True
+            else:
+                return False
+
 
         if face == 'Back':
-            self.imgNameB, imgType = QFileDialog.getOpenFileName()
-            self.lbl_back.setPixmap(QPixmap(self.imgNameB))
-            vbox = QVBoxLayout()
-            vbox.addWidget(self.lbl_back)
-            self.setLayout(vbox)
-            self.lbl_back.setScaledContents(True)
+            self.imgNameB, imgType = QFileDialog.getOpenFileName(filter='*.jpg;*.png')
+            if self.imgName!='':
 
-
-            # aip = CardAip(self.imgNameB)
-            # card = aip.getinfo(face)
+                self.lbl_back.setPixmap(QPixmap(self.imgNameB))
+                vbox = QVBoxLayout()
+                vbox.addWidget(self.lbl_back)
+                self.setLayout(vbox)
+                self.lbl_back.setScaledContents(True)
+                return True
+            else:
+                return False
 
     def viewF(self, card):
         if card is not None:
@@ -207,9 +310,13 @@ class Window(Ui_MainWindow, QMainWindow):
 
         return new_file
 
+
+    #身份信息保存、更新
     def create_car(self):
 
+
         new_car = BasicInfo()
+        user = UserInfo()
         new_car.PeopleName = self.txt_name.text()
         new_car.PeopleSex = self.txt_sex.text()
         new_car.IdNumber = self.txt_id_numer.text()
@@ -217,6 +324,12 @@ class Window(Ui_MainWindow, QMainWindow):
         new_car.PeopleNation = self.txt_nation.text()
         new_car.PeopleValStart = self.txt_start.text()
         new_car.PeopleValEnd = self.txt_end.text()
+
+        user.idNumber = self.txt_id_numer.text()
+        user.peoplePhone = self.txt_Phone.text()
+        user.PhoneCheck = self.txt_check.text()
+        user.wechat = self.txt_wechat.text()
+
         if len(new_car.PeopleName) != 0:
             if my_find(new_car.IdNumber):
 
@@ -225,23 +338,14 @@ class Window(Ui_MainWindow, QMainWindow):
                 if len(self.imgNameB) != 0:
                     new_car.PicBack = self.pathAdd(new_car, '2')
 
-                my_save(new_car)
+                my_save(new_car, user)
+                # self.save_ui()
             else:
                 reply = QMessageBox.question(self, '信息', '已录入，更新吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                 if reply == QMessageBox.Yes:
                     """
                     将文件名复制给PicFront、PicBack
                     """
-                    # if len(self.imgName) != 0:
-                    #     if len(self.imgName) != 0:
-                    #         new_car.PicFront = self.pathAdd(new_car, '1')
-                    #     if len(self.imgNameB) != 0:
-                    #         new_car.PicBack = self.pathAdd(new_car, '2')
-                    # if len(self.imgNameB) != 0:
-                    #     if len(self.imgName) != 0:
-                    #         new_car.PicFront = self.pathAdd(new_car, '1')
-                    #     if len(self.imgNameB) != 0:
-                    #         new_car.PicBack = self.pathAdd(new_car, '2')
                     if self.read_flag:
 
                         if len(self.imgName) != 0:
@@ -252,11 +356,15 @@ class Window(Ui_MainWindow, QMainWindow):
                     else:
                         new_car.PicFront = self.imgName
                         new_car.PicBack = self.imgNameB
-                    my_updata(new_car)
+                    my_updata(new_car, user)
+
+
             self.tab_view()
+
         else:
             QMessageBox.question(self, '信息', '必须有姓名！', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
+        self.save_ui()
 
 if __name__ == '__main__':
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)

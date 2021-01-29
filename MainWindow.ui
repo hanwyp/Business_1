@@ -81,6 +81,9 @@
         </property>
        </widget>
        <widget class="QPushButton" name="btnF">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>60</x>
@@ -94,6 +97,9 @@
         </property>
        </widget>
        <widget class="QPushButton" name="btnB">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>460</x>
@@ -120,6 +126,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="txt_name">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>130</x>
@@ -143,6 +152,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="txt_sex">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>330</x>
@@ -153,6 +165,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="txt_id_numer">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>130</x>
@@ -176,6 +191,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="txt_address">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>130</x>
@@ -199,6 +217,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="txt_nation">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>470</x>
@@ -235,6 +256,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="txt_start">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>470</x>
@@ -245,6 +269,9 @@
         </property>
        </widget>
        <widget class="QLineEdit" name="txt_end">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>620</x>
@@ -280,7 +307,10 @@
          <string>联系方式</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lineEdit">
+       <widget class="QLineEdit" name="txt_Phone">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>200</x>
@@ -316,7 +346,10 @@
          <string>微信</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lineEdit_2">
+       <widget class="QLineEdit" name="txt_wechat">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>440</x>
@@ -327,6 +360,9 @@
         </property>
        </widget>
        <widget class="QTableWidget" name="tableWidget">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>850</x>
@@ -369,10 +405,13 @@
         <column/>
        </widget>
        <widget class="QPushButton" name="btnOK">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
-          <x>80</x>
-          <y>500</y>
+          <x>290</x>
+          <y>580</y>
           <width>75</width>
           <height>23</height>
          </rect>
@@ -381,23 +420,97 @@
          <string>保存</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="tabView">
+       <widget class="QPushButton" name="btnNew">
         <property name="geometry">
          <rect>
-          <x>740</x>
-          <y>570</y>
-          <width>93</width>
-          <height>28</height>
+          <x>90</x>
+          <y>580</y>
+          <width>75</width>
+          <height>23</height>
          </rect>
         </property>
         <property name="text">
-         <string>PushButton</string>
+         <string>新建</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnEdit">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>580</y>
+          <width>75</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>修改</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnCancel">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>580</y>
+          <width>75</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>取消</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnDel">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>580</y>
+          <width>75</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>删除</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_11">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>500</y>
+          <width>54</width>
+          <height>12</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>电话</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txt_check">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>500</y>
+          <width>161</width>
+          <height>20</height>
+         </rect>
         </property>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
-        <string>Tab 2</string>
+        <string>营业执照</string>
        </attribute>
       </widget>
      </widget>
@@ -410,7 +523,7 @@
      <x>0</x>
      <y>0</y>
      <width>1235</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
