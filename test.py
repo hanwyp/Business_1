@@ -1,5 +1,6 @@
 import sys, os
 import threading
+from myTools import *
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
@@ -32,7 +33,10 @@ class Window(Ui_MainWindow, QMainWindow):
         # self.tab_view()
         # # self.tabView.clicked.connect(self.tab_view)
         # self.tableWidget.clicked.connect(self.addTxt)
+        self.comEducationalBackground.currentIndexChanged.connect(self.sel)
 
+    def sel(self):
+        print(self.comEducationalBackground.currentText())
 
 
 
@@ -41,15 +45,42 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Window()
     window.show()
-    # window.setEnabled()
-    # for i in  window.base_info.findChildren(QLineEdit):
-    #     i.setEnabled(True)
+    def ch():
+        # info = BusinessLicense()
+        # date_now = dateChange(window.de_Application.text())
+        # info.busApplicationDate = date_now
+        # print(info.busApplicationDate)
+        # db_session = DBSession()
+        #
+        # db_session.add(info)
+        # db_session.commit()
+        # db_session.close()
 
-    # for i in window.base_info.findChildren(QPushButton):
-    #     i.setEnabled(False)
+        date_now = datetime.date.today()
+        print(str(date_now))
 
-    # window.btnNew.setEnabled(True)
-    QFileDialog.getOpenFileName(filter='*.jpg;*.png')
 
+    def delet():
+        db_session = DBSession()
+        data = db_session.query(BusinessLicense).all()
+
+        # print(">>>>>>", data)
+
+        for i in data:
+            print(">>>>>",i)
+            db_session.delete(i)
+        db_session.commit()
+        db_session.close()
+
+
+    window.btnBusNew.clicked.connect(ch)
+    # window.btnBusDel.clicked.connect(delet)
+
+    # db_session = DBSession()
+    #
+    # db_session.add(info)
+    # db_session.commit()
+    # db_session.close()
+    #
     sys.exit(app.exec_())
 

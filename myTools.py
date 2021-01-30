@@ -11,6 +11,7 @@
 import sqlalchemy
 
 from models import *
+from datetime import datetime
 
 
 # engine = create_engine('sqlite:///Business_license.db?check_same_thread=False', echo=True)
@@ -31,7 +32,6 @@ def my_save(new_card, user):
     db_session.commit()
     db_session.close()
 
-
 def my_find(Number):
     db_session = DBSession()
     data = db_session.query(BasicInfo).filter_by(IdNumber=Number).first()
@@ -48,7 +48,6 @@ def my_find_re(Number):
     data = db_session.query(BasicInfo).filter_by(IdNumber=Number).first()
     db_session.close()
     return data
-
 
 def my_updata( card, user):
     db_session = DBSession()
@@ -71,10 +70,10 @@ def my_updata( card, user):
         user_data.PhoneCheck = user.PhoneCheck
         user_data.peoplePhone = user.peoplePhone
         user_data.idNumber = user.idNumber
+        user_data.educationalBackground = user.educationalBackground
 
     db_session.commit()
     db_session.close()
-
 
 def read_tab():
     db_session = DBSession()
@@ -93,20 +92,29 @@ def read_tab():
     # db_session.commit()
     db_session.close()
 
+def bus_save(info):
+    pass
+
+def dateChange(date):
+    expiration_year = int(date[:4])
+    expiration_month = int(date[5:7])
+    expiration_date = int(date[8:10])
+    expiration_date = datetime(expiration_year, expiration_month, expiration_date)
+    return expiration_date
+
 if __name__ == '__main__':
+
+    info = BusinessLicense()
+    info.busCreditCode = '92120225MA0742Q49U'
+    info.busDesignation = '天津市蓟州区志静兴养殖场'
+    info.busIdNumber = '120224197311231510'
+
+    print(info)
     db_session = DBSession()
-    # user = BasicInfo(PeopleName='z42s', IdNumber='54815812223')
-    # print(user)
-    # userinfo = UserInfo(PhoneCheck='9896654452',idNumber=user.IdNumber)
-    # print(userinfo)
-    # db_session.add(user)
-    # db_session.add(userinfo)
-    # data = db_session.query(BasicInfo).filter(BasicInfo.IdNumber=='120225198207143589').delete()
-    db_session.query(UserInfo).filter(UserInfo.idNumber=='120225198207143589').delete()
-    # print(data)
-    # data.delete()
-    # print(data)
-
-
+    # db_session.query(BusinessLicense).filter(BusinessLicense.busId==1).delete()
+    # db_session.query(BusinessLicense).filter(BusinessLicense.busIdNumber=='120224197311231510').delete()
+    #
+    db_session.add(info)
     db_session.commit()
     db_session.close()
+

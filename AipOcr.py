@@ -77,5 +77,5 @@ class CardAip():
 
 if __name__ == '__main__':
     aip = CardAip('2.jpg')
-    card =aip.getinfo()
-    print(card.name)
+    card =aip.getinfo('Front')
+    print(card)

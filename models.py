@@ -24,6 +24,7 @@ class BasicInfo(Base):
     PicBack = Column(String(100))
 
     user = relationship('UserInfo', uselist=False, backref='BasicInfo')
+    license = relationship("BusinessLicense")
 
 
 
@@ -40,9 +41,32 @@ class UserInfo(Base):
     peoplePhone = Column(String(100))
     PhoneCheck = Column(String(18))
     wechat = Column(String(10))
+    educationalBackground = Column(String, default='-1', server_default='-1')
 
     def __repr__(self):
         return "%s,%s,%s,%s" % (self.idNumber, self.peopleUser, self.peoplePassword, self.PhoneCheck)
+
+#  business license
+class BusinessLicense(Base):
+    __tablename__ = 'businessLicense'
+
+    busId = Column(Integer, primary_key=True, autoincrement=True)   # id
+    busIdNumber = Column(String, ForeignKey('BasicInfo.IdNumber'))  # 身份证号
+    busCreditCode = Column(String)  # 信用代码
+    busDesignation = Column(String) # 名称
+    busType = Column(Integer)   # 类型
+    busOperator = Column(String)    # 经营者姓名
+    busScope = Column(String)  # 经营范围
+    busOrganization = Column(String)   # 组织形式
+    busApplicationDate = Column(Date)  # 申请日期
+    busSite = Column(String)   # 经营场所
+    busFund = Column(String)   # 注册资金
+    busFmployeesNumber = Column(String)    # 从业人数
+    busInspection = Column(Date)    # 年检日期
+
+
+
+
 
 
 if __name__ == '__main__':
