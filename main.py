@@ -107,6 +107,14 @@ class Window(Ui_MainWindow, QMainWindow):
         self.comEducationalBackground.setCurrentIndex(-1)
         self.comEducationalBackground.setEnabled(True)
 
+        # self.lbl_Front.clear()
+        self.lbl_Front.setText('头像面')
+        # self.lbl_back.clear()
+        self.lbl_back.setText('国徽面')
+
+
+
+        """
         path = os.path.abspath('.')
         self.imgName = os.path.join(path, 'DataImg', 'none.jpg')
         self.imgNameB = os.path.join(path, 'DataImg', 'none.jpg')
@@ -124,6 +132,7 @@ class Window(Ui_MainWindow, QMainWindow):
         vbox.addWidget(self.lbl_back)
         self.setLayout(vbox)
         self.lbl_back.setScaledContents(True)
+        """
 
     def del_ui(self):
         pass
@@ -146,7 +155,8 @@ class Window(Ui_MainWindow, QMainWindow):
         db_session = DBSession()
         data = db_session.query(UserInfo).filter_by(idNumber=self.txt_id_numer.text()).first()
         db_session.close()
-        self.comEducationalBackground.setCurrentIndex(int(data.educationalBackground))
+        if data is not None:
+            self.comEducationalBackground.setCurrentIndex(int(data.educationalBackground))
 
     def btnNew_click(self):
         self.new_ui()
@@ -156,7 +166,7 @@ class Window(Ui_MainWindow, QMainWindow):
 
     def btnBus_click(self, idNumber):
 
-        self.txt_BusIdNumber.setText(idNumber)
+        self.txt_busIdNumber.setText(idNumber)
         self.txt_busSelect.setText(idNumber)
         self.tabWidget.setCurrentIndex(1)
 
