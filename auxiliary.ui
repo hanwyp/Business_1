@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>332</width>
+    <height>498</height>
+   </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
+  </property>
+  <property name="windowTitle">
+   <string>辅助</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QTabWidget" name="tab_AS">
+     <property name="font">
+      <font>
+       <family>微软雅黑 Light</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>申报</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <layout class="QFormLayout" name="formLayout_2">
+           <property name="labelAlignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>姓名</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="txt_name"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>电话</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="txt_phone"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>密码</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="txt_password"/>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_13">
+             <property name="text">
+              <string>身份证号</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="txt_idNumber"/>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>户籍地址</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QLineEdit" name="txt_address"/>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>民族</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QLineEdit" name="txt_nation"/>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_19">
+             <property name="text">
+              <string>学历</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QLineEdit" name="txt_educationalBackground"/>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>身份证有效期</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QLineEdit" name="txt_validity"/>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="label_17">
+             <property name="text">
+              <string>投资金额</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1">
+            <widget class="QLineEdit" name="txt_amount"/>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="label_18">
+             <property name="text">
+              <string>从业人数</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="1">
+            <widget class="QLineEdit" name="txt_peoNumber"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tab_declare"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>年检</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <layout class="QFormLayout" name="formLayout">
+           <property name="labelAlignment">
+            <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
+           </property>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>企业名称</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="txt_ASDesignation"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>姓名</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="txt_ASname"/>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>电话</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="txt_ASphone"/>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>身份证号</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QLineEdit" name="txt_ASidNumber"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>营业执照号码</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="txt_AScreditCode"/>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>投资金额</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QLineEdit" name="txt_ASamount"/>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>从业人数</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QLineEdit" name="txt_ASpeoNumber"/>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>上年度营业额</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QLineEdit" name="txt_ASturnover"/>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>上年度税额</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1">
+            <widget class="QLineEdit" name="txt_ASTax"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidget_2"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
